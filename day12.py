@@ -38,7 +38,7 @@ def main():
         pots = '.' + pots
 
     # Creating array of rule => new state
-    in_put = open('inputs/twelve.txt')
+    in_put = open('inputs/day12.txt')
     rules = []
     for line in in_put:
         if line[0] == '.' or line[0] == '#':
