@@ -38,14 +38,14 @@ def main():
         pots = '.' + pots
 
     # Creating array of rule => new state
-    input = open('twelve.txt')
+    in_put = open('inputs/twelve.txt')
     rules = []
-    for line in input:
+    for line in in_put:
         if line[0] == '.' or line[0] == '#':
             rules.append((line[:5],line[9]))
     
     '''
-    Find where pattern emerges
+    Find where pattern emerges manually
     find_pattern(pots,rules,offset)
     sum: 11873, gen: 134, pattern: +86
     '''
