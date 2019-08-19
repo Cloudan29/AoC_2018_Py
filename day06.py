@@ -1,6 +1,6 @@
 # Create dictionary containing all coordinates
 coordinates = {}
-with open("inputs/day6.txt") as inp:
+with open("inputs/day06.txt") as inp:
     i = 0
     for line in inp:
         coordinates[i] = (int(line.split(", ")[0]), int(line.split(", ")[1]))

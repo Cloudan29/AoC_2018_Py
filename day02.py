@@ -13,7 +13,7 @@ def part1():
     twos = 0
     threes = 0
     alphabet = string.ascii_lowercase
-    with open("inputs/day2.txt") as inp:
+    with open("inputs/day02.txt") as inp:
         for line in inp:
             two_flag = False
             three_flag = False
@@ -31,7 +31,7 @@ def part1():
 
 
 def part2():
-    inp = open("inputs/day2.txt")
+    inp = open("inputs/day02.txt")
     box_ids = [line for line in inp]
     correct_ids = None
     for i in range(len(box_ids)-1):

@@ -1,7 +1,7 @@
 # Create fabric and list all claims
 fabric = [[0 for i in range(1000)] for j in range(1000)]
 claims = []
-with open("inputs/day3.txt") as inp:
+with open("inputs/day03.txt") as inp:
     for line in inp:
         claim = line.split(" ")
         claim_id = int(claim[0][1:])

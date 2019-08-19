@@ -25,7 +25,7 @@ class Node:
         return ans
 
 # Create list of all info
-with open("inputs/day8.txt") as inp:
+with open("inputs/day08.txt") as inp:
     info = [int(info) for info in inp.read().split(" ")]
 
 def build_tree(num_children, num_metadata):

@@ -37,10 +37,10 @@ def part2():
     high_alpha = string.ascii_uppercase
     lengths = []
     for i in range(len(low_alpha)):
-        polymer = open("inputs/day5.txt").read().replace(low_alpha[i], '').replace(high_alpha[i], '')
+        polymer = open("inputs/day05.txt").read().replace(low_alpha[i], '').replace(high_alpha[i], '')
         lengths.append(part1(polymer))
     return min(lengths)
 
 
-print (part1(open("inputs/day5.txt").read()))
+print (part1(open("inputs/day05.txt").read()))
 print (part2())

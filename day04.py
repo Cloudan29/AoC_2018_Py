@@ -29,7 +29,7 @@ class Guard:
 # Already sorted inputs, just gotta go through
 # Setting up all the guards information into a dictionary
 guards = {}
-with open("inputs/day4.txt") as inp:
+with open("inputs/day04.txt") as inp:
     guard = None
     for line in inp:
         info = line.split(" ")

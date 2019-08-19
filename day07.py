@@ -36,7 +36,7 @@ class Step():
 
 def setup_steps():
     steps = {}
-    with open("inputs/day7.txt") as inp:
+    with open("inputs/day07.txt") as inp:
         for line in inp:
             prev = line.split(" ")[1]
             after = line.split(" ")[7]

@@ -1,5 +1,5 @@
 def part1():
-    with open("inputs/day1.txt") as inp:
+    with open("inputs/day01.txt") as inp:
         sum = 0
         for line in inp:
             sum += int(line)
@@ -11,7 +11,7 @@ def part2():
     sum = 0
     reaches = []
     while True:
-        with open("inputs/day1.txt") as inp:
+        with open("inputs/day01.txt") as inp:
             for line in inp:
                 sum += int(line)
                 if sum in reaches:
