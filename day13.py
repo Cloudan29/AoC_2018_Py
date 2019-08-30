@@ -58,8 +58,9 @@ class Cart():
         return False
 
     def __eq__(self, cart):
-        if self.y == cart.y and self.x == cart.x:
-            return True
+        if not cart.dead:
+            if self.y == cart.y and self.x == cart.x:
+                return True
         
         return False
 
@@ -131,11 +132,11 @@ def move_carts(track, carts):
         crash = False
         j = 0
         carts[i].step(track)
-        while j < len(carts) - 1:
+        while j < len(carts):
             if i != j and carts[i] == carts[j]:
                 crash_locations.append((carts[i].x, carts[i].y))
-                carts.remove(carts[i])
-                carts.remove(carts[j])
+                carts[i].dead = True
+                carts[j].dead = True
                 if j < i:
                     i -= 1
                 crash = True
@@ -169,10 +170,12 @@ def part2():
     while True:
         carts.sort()
         move_carts(track, carts)
+        carts = [cart for cart in carts if not cart.dead]
         if len(carts) == 1:
             break
 
     return (carts[0].x, carts[0].y)
+
 
 
 print (part1())
