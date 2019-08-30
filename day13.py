@@ -2,8 +2,8 @@ class Cart():
     def __init__(self, x, y, dir):
         self.x = x
         self.y = y
-        self.dir = dir # 'v'=0, '>'=1, '^'=2, '<'=3, makes it so any rotation is just a + or -
-        self.turn = 0 # left=0, straight=1, right=2
+        self.dir = dir # 'v'=0, '>'=1, '^'=2, '<'=3, makes it so any rotation is just a (dir + 1) % 4 or (dir + 3) % 4
+        self.turn = 0 # left=0, straight=1, right=2, alternates between these on intersections
         self.dead = False
         return
 
@@ -20,16 +20,19 @@ class Cart():
 
         # Change direction if need be
         if track[self.y][self.x] == '\\':
+            # When going up or down this is a left turn, when going left or right this is a right turn
             if self.dir == 0 or self.dir == 2:
                 self.dir = (self.dir + 1) % 4
             else:
                 self.dir = (self.dir + 3) % 4
         elif track[self.y][self.x] == '/':
+            # Opposite as other turn
             if self.dir == 0 or self.dir == 2:
                 self.dir = (self.dir + 3) % 4
             else:
                 self.dir = (self.dir + 1) % 4
         elif track[self.y][self.x] == '+':
+            # Intersections
             if self.turn == 0:
                 self.dir = (self.dir + 1) % 4
             elif self.turn == 2:
@@ -39,6 +42,7 @@ class Cart():
 
         return
 
+    # For easy sorting
     def __lt__(self, cart):
         if self.y < cart.y:
             return True
@@ -48,6 +52,7 @@ class Cart():
 
         return False
 
+    # For good measure
     def __gt__(self, cart):
         if self.y > cart.y:
             return True
@@ -57,16 +62,20 @@ class Cart():
 
         return False
 
+    # For easy comparisons
     def __eq__(self, cart):
+        # Only considers it a collision when the cart isn't dead. If it's dead it isn't actually on the track
         if not cart.dead:
             if self.y == cart.y and self.x == cart.x:
                 return True
         
         return False
 
+    # Because debuggers are useful
     def __repr__(self):
         return "Cart: " + str(self.x) + ", " + str(self.y)
 
+    # Because printing is also useful
     def __str__(self):
         if self.dir == 0:
             return 'v'
@@ -78,7 +87,7 @@ class Cart():
             return '<'
 
 
-
+# Creates a 2d array containing the track (without the carts on it), along with an array of carts
 def setup_track():
     track = []
     with open("inputs/day13.txt") as inp:
@@ -108,7 +117,7 @@ def setup_track():
     return track, carts
 
 
-
+# Prints the track with all the carts on it
 def show_track(track, carts):
     display_track = []
     for row in track:
@@ -124,33 +133,31 @@ def show_track(track, carts):
         print (new_line)
 
 
-
+# One step of moving the carts. Returns all the crash locations in the order that they happen
 def move_carts(track, carts):
     crash_locations = []
     i = 0
     while i < len(carts):
-        crash = False
         j = 0
-        carts[i].step(track)
-        while j < len(carts):
-            if i != j and carts[i] == carts[j]:
-                crash_locations.append((carts[i].x, carts[i].y))
-                carts[i].dead = True
-                carts[j].dead = True
-                if j < i:
-                    i -= 1
-                crash = True
-                break
+        # Step if the cart isn't crashed
+        if not carts[i].dead:
+            carts[i].step(track)
+            while j < len(carts):
+                if i != j and carts[i] == carts[j]:
+                    crash_locations.append((carts[i].x, carts[i].y))
+                    # Kill carts that are at the same location
+                    carts[i].dead = True
+                    carts[j].dead = True
+                    break
 
-            j += 1
+                j += 1
 
-        if not crash:
-            i += 1
+        i += 1
 
     return crash_locations
 
 
-
+# Returns the first crash location
 def part1():
     track, carts = setup_track()
 
@@ -163,7 +170,7 @@ def part1():
     return crash_locations[0]
 
 
-
+# Returns the location of the last cart alive at the end of the step where the last crash happens
 def part2():
     track, carts = setup_track()
 
@@ -180,4 +187,3 @@ def part2():
 
 print (part1())
 print (part2())
-    
