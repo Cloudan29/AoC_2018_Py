@@ -19,28 +19,160 @@ class Cart():
             self.x -= 1
 
         # Change direction if need be
-        if track == '\\':
-            self.dir = (self.dir + 1) % 4
-        elif track == '/':
-            self.dir = (self.dir + 3) % 4
-        elif track == '+':
-            if self.turn == 0:
-                self.dir = (self.dir + 3) % 4
-            # If it's 1, you don't turn
-            elif self.turn == 2:
+        if track[self.y][self.x] == '\\':
+            if self.dir == 0 or self.dir == 2:
                 self.dir = (self.dir + 1) % 4
+            else:
+                self.dir = (self.dir + 3) % 4
+        elif track[self.y][self.x] == '/':
+            if self.dir == 0 or self.dir == 2:
+                self.dir = (self.dir + 3) % 4
+            else:
+                self.dir = (self.dir + 1) % 4
+        elif track[self.y][self.x] == '+':
+            if self.turn == 0:
+                self.dir = (self.dir + 1) % 4
+            elif self.turn == 2:
+                self.dir = (self.dir + 3) % 4
 
             self.turn = (self.turn + 1) % 3
 
         return
 
+    def __lt__(self, cart):
+        if self.y < cart.y:
+            return True
+        elif self.y == cart.y:
+            if self.x < cart.x:
+                return True
+
+        return False
+
+    def __gt__(self, cart):
+        if self.y > cart.y:
+            return True
+        elif self.y == cart.y:
+            if self.x > cart.x:
+                return True
+
+        return False
+
+    def __eq__(self, cart):
+        if self.y == cart.y and self.x == cart.x:
+            return True
+        
+        return False
+
+    def __repr__(self):
+        return "Cart: " + str(self.x) + ", " + str(self.y)
+
+    def __str__(self):
+        if self.dir == 0:
+            return 'v'
+        if self.dir == 1:
+            return '>'
+        if self.dir == 2:
+            return '^'
+        if self.dir == 3:
+            return '<'
+
+
+
+def setup_track():
+    track = []
+    with open("inputs/day13.txt") as inp:
+        for line in inp:
+            track_row = []
+            line = line.replace('\n', '')
+            for c in line:
+                track_row.append(c)
+            track.append(track_row)
+
+    carts = []
+    for i in range(len(track)):
+        for j in range(len(track[i])):
+            if track[i][j] == '<':
+                carts.append(Cart(j, i, 3))
+                track[i][j] = '-'
+            elif track[i][j] == '>':
+                carts.append(Cart(j, i, 1))
+                track[i][j] = '-'
+            elif track[i][j] == '^':
+                carts.append(Cart(j, i, 2))
+                track[i][j] = '|'
+            elif track[i][j] == 'v':
+                carts.append(Cart(j, i, 0))
+                track[i][j] = '|'
+
+    return track, carts
+
+
+
+def show_track(track, carts):
+    display_track = []
+    for row in track:
+        display_track.append(row.copy())
+
+    for cart in carts:
+        display_track[cart.y][cart.x] = str(cart)
+
+    for row in display_track:
+        new_line = ''
+        for c in row:
+            new_line += c
+        print (new_line)
+
+
+
+def move_carts(track, carts):
+    crash_locations = []
+    i = 0
+    while i < len(carts):
+        crash = False
+        j = 0
+        carts[i].step(track)
+        while j < len(carts) - 1:
+            if i != j and carts[i] == carts[j]:
+                crash_locations.append((carts[i].x, carts[i].y))
+                carts.remove(carts[i])
+                carts.remove(carts[j])
+                if j < i:
+                    i -= 1
+                crash = True
+                break
+
+            j += 1
+
+        if not crash:
+            i += 1
+
+    return crash_locations
+
+
 
 def part1():
-    return
+    track, carts = setup_track()
+
+    while True:
+        carts.sort()
+        crash_locations = move_carts(track, carts)
+        if len(crash_locations) > 0:
+            break
+        
+    return crash_locations[0]
+
 
 
 def part2():
-    return
+    track, carts = setup_track()
+
+    while True:
+        carts.sort()
+        move_carts(track, carts)
+        if len(carts) == 1:
+            break
+
+    return (carts[0].x, carts[0].y)
 
 
 print (part1())
